@@ -2,12 +2,19 @@ package clerk
 
 import (
 	"fmt"
+	"net/http"
 	"testing"
 	"time"
 )
 
 func Test(t *testing.T) {
-	clerk := New("https://coingecko.com")
+
+	req, err := http.NewRequest("GET", "https://coingecko.com", nil)
+	if err != nil {
+		panic(err)
+	}
+
+	clerk := New(req)
 	clerk.NumUsers = 200
 	clerk.NumRequests = 1
 	clerk.WaitTime = time.Millisecond * 500

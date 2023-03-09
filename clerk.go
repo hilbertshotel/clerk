@@ -8,23 +8,23 @@ import (
 
 // Holds necessary data for load testing
 type Clerk struct {
-	URL         string        // request url
+	Request     *http.Request // request struct
 	NumUsers    int           // number of users to make requests
 	NumRequests int           // number of requests per user
 	WaitTime    time.Duration // time to wait in between request
 }
 
-// Instantiate new Clerk struct with specified url and default fields
-func New(url string) *Clerk {
+// Instantiate new Clerk struct with specified request and default fields
+func New(req *http.Request) *Clerk {
 	return &Clerk{
-		URL:         url,
+		Request:     req,
 		NumUsers:    1,
 		NumRequests: 1,
 		WaitTime:    time.Second * 1,
 	}
 }
 
-// Perform load testing on the url specified in Clerk
+// Perform load testing on the request specified in Clerk
 func (clerk *Clerk) Run() *Results {
 	var wg sync.WaitGroup
 	var results Results
@@ -38,7 +38,7 @@ func (clerk *Clerk) Run() *Results {
 
 			n := clerk.NumRequests
 			for n > 0 {
-				t, err := RoundTrip(clerk.URL)
+				t, err := RoundTrip(clerk.Request)
 				if err != nil {
 					res.Errors = append(res.Errors, err)
 					continue
@@ -59,19 +59,12 @@ func (clerk *Clerk) Run() *Results {
 	return &results
 }
 
-// Send and time a get request to the specified url
-func RoundTrip(url string) (time.Duration, error) {
-	var t time.Duration
-
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return t, err
-	}
-
+// Times an http request
+func RoundTrip(req *http.Request) (time.Duration, error) {
 	start := time.Now()
-	_, err = http.DefaultTransport.RoundTrip(req)
+	_, err := http.DefaultTransport.RoundTrip(req)
 	if err != nil {
-		return t, err
+		return time.Duration(0), err
 	}
 
 	return time.Since(start), nil

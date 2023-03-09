@@ -9,8 +9,25 @@ import (
 )
 
 func main() {
-    // Instantiate new Clerk struct with the request url as argument
-    clerk := clerk.New("https://coingecko.com")
+
+    // Create your request with the http package
+    req , err := http.NewRequest("GET", "https://coingecko.com", nil)
+    if err != nil {
+        panic(err)
+    }
+
+    // Add necessary headers
+    req.Header = http.Header{
+        "Host": {"www.host.com"},
+        "Content-Type": {"application/json"},
+        "Authorization": {"Bearer Token"},
+    }
+
+    // You can add a body as well
+    req.Body = ...
+
+    // Instantiate new Clerk struct with the request as argument
+    clerk := clerk.New(req)
 
     // Modify parameters
     clerk.NumUsers = 200                    // default=1
@@ -30,7 +47,7 @@ func main() {
 Type annotations:
 ```go
 type Clerk struct {
-	URL         string        // request url
+	Request     *http.Request // request struct
 	NumUsers    int           // number of users to make requests
 	NumRequests int           // number of requests per user
 	WaitTime    time.Duration // time to wait in between request
@@ -47,3 +64,5 @@ type Results struct {
 	mutex sync.Mutex
 }
 ```
+
+Check the documentation for http.Request @ https://pkg.go.dev/net/http#Request
