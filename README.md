@@ -37,6 +37,9 @@ func main() {
     // Run load testing
     results := clerk.Run()
 
+    // Check run time of load testing
+    fmt.Println(results.RunTime)
+
     // Check results slice for response times & errors
     for _, res := range results.List {
         fmt.Println(res)
@@ -55,13 +58,14 @@ type Clerk struct {
 
 type Result struct {
 	Pid       int
-	RespTimes []time.Duration
+	RespTimes []int64
 	Errors    []error
 }
 
 type Results struct {
-	List  []Result
-	mutex sync.Mutex
+	List    []Result
+    RunTime time.Duration
+	mutex   sync.Mutex
 }
 ```
 
