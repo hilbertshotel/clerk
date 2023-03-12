@@ -14,8 +14,9 @@ type Result struct {
 
 // Holds list of results and a lock for concurrent writing
 type Results struct {
-	List  []Result
-	mutex sync.Mutex
+	List    []Result
+	RunTime time.Duration
+	mutex   sync.Mutex
 }
 
 // Instantiate new Result struct with specified process id

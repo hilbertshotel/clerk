@@ -26,6 +26,7 @@ func New(req *http.Request) *Clerk {
 
 // Perform load testing on the request specified in Clerk
 func (clerk *Clerk) Run() *Results {
+	start := time.Now()
 	var wg sync.WaitGroup
 	var results Results
 
@@ -55,6 +56,7 @@ func (clerk *Clerk) Run() *Results {
 	}
 
 	wg.Wait()
+	results.RunTime = time.Since(start)
 
 	return &results
 }
