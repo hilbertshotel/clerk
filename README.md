@@ -64,7 +64,7 @@ type Result struct {
 
 type Results struct {
 	List    []Result
-    RunTime time.Duration
+	RunTime time.Duration
 	mutex   sync.Mutex
 }
 ```
