@@ -8,7 +8,7 @@ import (
 // Holds result data for each user/goroutine
 type Result struct {
 	Pid       int
-	RespTimes []time.Duration
+	RespTimes []int64
 	Errors    []error
 }
 

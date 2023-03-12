@@ -15,12 +15,13 @@ func Test(t *testing.T) {
 	}
 
 	clerk := New(req)
-	clerk.NumUsers = 200
-	clerk.NumRequests = 1
+	clerk.NumUsers = 3
+	clerk.NumRequests = 2
 	clerk.WaitTime = time.Millisecond * 500
 
 	results := clerk.Run()
 
+	fmt.Println(results.RunTime)
 	for _, res := range results.List {
 		fmt.Println(res)
 	}

@@ -39,12 +39,12 @@ func (clerk *Clerk) Run() *Results {
 
 			n := clerk.NumRequests
 			for n > 0 {
-				t, err := RoundTrip(clerk.Request)
+				t, err := timedRoundTrip(clerk.Request)
 				if err != nil {
 					res.Errors = append(res.Errors, err)
 					continue
 				}
-				res.RespTimes = append(res.RespTimes, t)
+				res.RespTimes = append(res.RespTimes, t.Milliseconds())
 
 				time.Sleep(clerk.WaitTime)
 				n--
@@ -62,7 +62,7 @@ func (clerk *Clerk) Run() *Results {
 }
 
 // Times an http request
-func RoundTrip(req *http.Request) (time.Duration, error) {
+func timedRoundTrip(req *http.Request) (time.Duration, error) {
 	start := time.Now()
 	_, err := http.DefaultTransport.RoundTrip(req)
 	if err != nil {
